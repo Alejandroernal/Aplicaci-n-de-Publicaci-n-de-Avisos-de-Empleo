@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alejandroernal/Aplicaci-n-de-Publicaci-n-de-Avisos-de-Empleo.git"
+  },
+  "author": "ale bernal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alejandroernal/Aplicaci-n-de-Publicaci-n-de-Avisos-de-Empleo/issues"
+  },
+  "homepage": "https://github.com/Alejandroernal/Aplicaci-n-de-Publicaci-n-de-Avisos-de-Empleo#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
