@@ -1,0 +1,22 @@
+{
+  "empresa": [
+    {
+      "id": "1",
+      "titulo": "Arto Hellas",
+      "descripcion": "040-123456",
+      "localidad": "Finlandia",
+      "tipocontrato": "Full Time",
+      "compania": "Arto Hellas",
+      "fecha": "2023-01-01"
+    },
+    {
+      "id": "c14b",
+      "titulo": "Poronga",
+      "descripcion": "sadds",
+      "localidad": "TL",
+      "tipocontrato": "Escrito",
+      "compania": "Beatmakers",
+      "fecha": "9/9/2"
+    }
+  ]
+}

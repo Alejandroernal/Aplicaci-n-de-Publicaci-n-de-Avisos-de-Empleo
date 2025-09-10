@@ -1,17 +1,36 @@
-import axios from 'axios'
+const express = require('express')
+const fs = require('fs')
+const cors = require('cors')
+const app = express()
 
-const baseUrl = 'http://localhost:3001/empresa'
+app.use(cors())
+app.use(express.json())
 
-const getAll = () => {
-  return axios.get(baseUrl).then(response => response.data)
-}
+const dbPath = './empresas-db.json'
 
-const create = (newEmpresa) => {
-  return axios.post(baseUrl, newEmpresa).then(response => response.data)
-}
+// Obtener todas las empresas
+app.get('/empresa', (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbPath))
+  res.json(data.empresa)
+})
 
-const remove = id => axios.delete(`${baseUrl}/${id}`)
+// Agregar una empresa
+app.post('/empresa', (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbPath))
+  const nuevaEmpresa = { ...req.body, id: Date.now().toString() }
+  data.empresa.push(nuevaEmpresa)
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2))
+  res.status(201).json(nuevaEmpresa)
+})
 
-const update =(id, updatedEmpresa) => axios.put(`${baseUrl}/${id}`, updatedEmpresa).then(res => res.data)
+// Eliminar una empresa
+app.delete('/empresa/:id', (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbPath))
+  data.empresa = data.empresa.filter(e => e.id !== req.params.id)
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2))
+  res.status(204).end()
+})
 
-export default { getAll, create , remove, update}
+app.listen(3001, () => {
+  console.log('Servidor backend escuchando en puerto 3001')
+})
