@@ -1,0 +1,1 @@
+// Controlador para gestionar avisos de empleo (Logica para listar, crear, editar, eliminar)

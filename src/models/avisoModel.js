@@ -1,0 +1,1 @@
+// Modelo para los avisos de empleo (funciones para interactuar con la base de datos)
