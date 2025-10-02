@@ -1,3 +1,4 @@
+/*
 // Rutas para gestionar avisos de empleo (Conecta con los controllers)
 
 // src/routes/avisoRoutes.js
@@ -164,3 +165,15 @@ const crearRouter = (supabase) => {
 
 // Exporta la función principal (usa ES Modules, no module.exports)
 export default crearRouter;
+
+
+*/
+
+import express from 'express'
+const router = express.Router()
+
+router.get('/', (req, res) => {
+  res.json({ msg: 'Ruta de avisos funcionando ✅' })
+})
+
+export default router

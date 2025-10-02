@@ -12,6 +12,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
+console.log('Montando rutas...');
 
 app.get('/', (req, res) => {
   res.json({
@@ -28,7 +29,7 @@ app.get('/', (req, res) => {
 app.use('/api/empresas', empresaRoutes)
 app.use('/api/avisos', avisoRoutes)
 
-
+console.log('Rutas montadas correctamente');
 
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en  http://localhost:${PORT}`)

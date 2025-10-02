@@ -1,3 +1,5 @@
+/*
+
 // Rutas para gestionar empresas (Conecta con los controllers)
 
 // routes/empresas.js
@@ -24,10 +26,21 @@ const listarEmpresas = (supabase) => async (req, res) => {
   router.get('/', listarEmpresas);
 
   // Aquí puedes agregar más rutas fácilmente, ej:
-  // router.post('/', async (req, res) => { /* lógica para crear empresa */ });
+  // router.post('/', async (req, res) => { /* lógica para crear empresa */ //});
 
   // Retorna el router (¡ahora sí es legal, porque está dentro de la función!)
 
 
   
-export default router;
+//export default router;
+//*/
+
+
+import express from 'express'
+const router = express.Router()
+
+router.get('/', (req, res) => {
+  res.json({ msg: 'Ruta de empresas funcionando ✅' })
+})
+
+export default router
