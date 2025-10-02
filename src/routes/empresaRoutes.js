@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.get('/', empresaController.getEmpresas)
 router.post('/', empresaController.addEmpresa)
-router.delete('/:id', empresaController.deleteEmpresa)
+router.delete('/:empresa_id', empresaController.deleteEmpresa)
 
 export default router

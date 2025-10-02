@@ -22,7 +22,7 @@ export async function addEmpresa(req, res) {
 
 export async function deleteEmpresa(req, res) {
   try {
-    await empresaModel.deleteEmpresa(req.params.id)
+    await empresaModel.deleteEmpresa(req.params.empresa_id)
     res.status(204).end()
   } catch (error) {
     res.status(500).json({ error: error.message })

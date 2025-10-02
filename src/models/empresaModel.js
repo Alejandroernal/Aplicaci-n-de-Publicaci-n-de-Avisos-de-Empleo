@@ -14,7 +14,7 @@ export async function addEmpresa(empresa) {
   return data[0]
 }
 
-export async function deleteEmpresa(id) {
-  const { error } = await supabase.from('empresa').delete().eq('id', id)
+export async function deleteEmpresa(empresa_id) {
+  const { error } = await supabase.from('empresa').delete().eq('empresa_id', empresa_id)
   if (error) throw error
 }
