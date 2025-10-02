@@ -1,6 +1,6 @@
 // Controlador para gestionar avisos de empleo (Logica para listar, crear, editar, eliminar)
 
-import * as avisoModel from '../models/avisoModel.js'
+import * as avisoModel from './models/avisoModel.js'
 
 export async function getAvisos(req, res) {
   try {

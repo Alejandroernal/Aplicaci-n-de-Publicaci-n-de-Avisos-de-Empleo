@@ -1,30 +1,84 @@
-// Controlador para gestionar empresas (Logica para listar, crear, editar, eliminar)
+import { empresaModel } from '../models/empresaModel.js';
 
-import * as empresaModel from '../models/empresaModel.js'
+export const empresaController = {
+  async getAll(req, res, next) {
+    try {
+      const empresas = await empresaModel.getAll();
+      res.json(empresas);
+    } catch (error) {
+      next(error);
+    }
+  },
 
-export async function getEmpresas(req, res) {
-  try {
-    const empresas = await empresaModel.getEmpresas()
-    res.json(empresas)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
+  async getById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const empresa = await empresaModel.getById(id);
+
+      if (!empresa) {
+        return res.status(404).json({
+          error: 'Empresa no encontrada'
+        });
+      }
+
+      res.json(empresa);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async create(req, res, next) {
+    try {
+      const empresaExistente = await empresaModel.getByNombre(req.body.nombre);
+
+      if (empresaExistente) {
+        return res.status(409).json({
+          error: 'Ya existe una empresa con ese nombre',
+          empresa: empresaExistente
+        });
+      }
+
+      const nuevaEmpresa = await empresaModel.create(req.body);
+      res.status(201).json(nuevaEmpresa);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      const empresaActualizada = await empresaModel.update(id, req.body);
+
+      if (!empresaActualizada) {
+        return res.status(404).json({
+          error: 'Empresa no encontrada'
+        });
+      }
+
+      res.json(empresaActualizada);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      const empresaEliminada = await empresaModel.delete(id);
+
+      if (!empresaEliminada) {
+        return res.status(404).json({
+          error: 'Empresa no encontrada'
+        });
+      }
+
+      res.json({
+        message: 'Empresa eliminada exitosamente',
+        empresa: empresaEliminada
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-}
-
-export async function addEmpresa(req, res) {
-  try {
-    const empresa = await empresaModel.addEmpresa(req.body)
-    res.status(201).json(empresa)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
-
-export async function deleteEmpresa(req, res) {
-  try {
-    await empresaModel.deleteEmpresa(req.params.empresa_id)
-    res.status(204).end()
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+};

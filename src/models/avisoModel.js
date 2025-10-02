@@ -1,6 +1,6 @@
 // Modelo para los avisos de empleo (funciones para interactuar con la base de datos)
 
-import { supabase } from '../config/database.js'
+import { supabase } from './config/database.js'
 
 export async function getAvisos() {
   // Incluye el nombre de la empresa asociada usando empresa_id

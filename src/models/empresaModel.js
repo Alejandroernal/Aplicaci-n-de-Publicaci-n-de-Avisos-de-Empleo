@@ -1,6 +1,6 @@
 // Modelo para las empresas (Funciones para interactuar con la base de datos)
 
-import { supabase } from '../config/database.js'
+import { supabase } from './config/database.js'
 
 export async function getEmpresas() {
   const { data, error } = await supabase.from('empresa').select('*')
