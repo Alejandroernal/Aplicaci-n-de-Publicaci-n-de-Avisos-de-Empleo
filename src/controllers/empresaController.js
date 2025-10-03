@@ -1,9 +1,15 @@
-import * as  empresaModel from '../models/empresaModel.js';
+import * as empresaModel from '../models/empresaModel.js';
 
 export const empresaController = {
   async getAll(req, res, next) {
     try {
-      const empresas = await empresaModel.getAll();
+      const { nombre, email } = req.query;  // Filtros opcionales de query params
+      const filters = {};
+
+      if (nombre) filters.nombre = nombre;
+      if (email) filters.email = email;
+
+      const empresas = await empresaModel.getEmpresas(filters);  //  Pasa filters si se proporcionan
       res.json(empresas);
     } catch (error) {
       next(error);
@@ -13,7 +19,7 @@ export const empresaController = {
   async getById(req, res, next) {
     try {
       const { id } = req.params;
-      const empresa = await empresaModel.getById(id);
+      const empresa = await empresaModel.getEmpresaById(id);
 
       if (!empresa) {
         return res.status(404).json({
@@ -29,17 +35,10 @@ export const empresaController = {
 
   async create(req, res, next) {
     try {
-      const empresaExistente = await empresaModel.getByNombre(req.body.nombre);
+      const nuevaEmpresa = await empresaModel.addEmpresa(req.body);
+      const empresaCompleta = await empresaModel.getEmpresaById(nuevaEmpresa.empresa_id);  // Usa empresa_id (ajusta si es 'id')
 
-      if (empresaExistente) {
-        return res.status(409).json({
-          error: 'Ya existe una empresa con ese nombre',
-          empresa: empresaExistente
-        });
-      }
-
-      const nuevaEmpresa = await empresaModel.create(req.body);
-      res.status(201).json(nuevaEmpresa);
+      res.status(201).json(empresaCompleta);
     } catch (error) {
       next(error);
     }
@@ -48,7 +47,8 @@ export const empresaController = {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      const empresaActualizada = await empresaModel.update(id, req.body);
+
+      const empresaActualizada = await empresaModel.updateEmpresa(id, req.body);
 
       if (!empresaActualizada) {
         return res.status(404).json({
@@ -56,7 +56,8 @@ export const empresaController = {
         });
       }
 
-      res.json(empresaActualizada);
+      const empresaCompleta = await empresaModel.getEmpresaById(empresaActualizada.empresa_id);  //  Usa empresa_id
+      res.json(empresaCompleta);
     } catch (error) {
       next(error);
     }
@@ -65,17 +66,17 @@ export const empresaController = {
   async delete(req, res, next) {
     try {
       const { id } = req.params;
-      const empresaEliminada = await empresaModel.delete(id);
+      const success = await empresaModel.deleteEmpresa(id);  // Renombré para claridad
 
-      if (!empresaEliminada) {
+      if (!success) {
         return res.status(404).json({
           error: 'Empresa no encontrada'
         });
       }
 
       res.json({
-        message: 'Empresa eliminada exitosamente',
-        empresa: empresaEliminada
+        message: 'Empresa eliminada exitosamente'
+        // No incluyas 'empresa: success' ya que es true, no el objeto
       });
     } catch (error) {
       next(error);

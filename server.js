@@ -3,7 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import empresaRoutes from './src/routes/empresaRoutes.js'
 import avisoRoutes from './src/routes/avisoRoutes.js'
-
+import { errorHandler, notFound } from './src/middlewares/errorHandler.js';  // Ajusta la ruta según tu estructura de carpetas
 
 
 dotenv.config()
@@ -37,6 +37,11 @@ app.use((error, req, res, next) => {
   console.error('Error global:', error);
   res.status(500).json({ error: error.message });
 });
+
+
+  app.use(notFound);
+  app.use(errorHandler);
+  
 
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en  http://localhost:${PORT}`)
