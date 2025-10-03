@@ -1,39 +1,106 @@
-// Controlador para gestionar avisos de empleo (Logica para listar, crear, editar, eliminar)
 
-import * as avisoModel from './models/avisoModel.js'
+import * as avisoModel from '../models/avisoModel.js';
+import * as empresaModel from '../models/empresaModel.js';
 
-export async function getAvisos(req, res) {
-  try {
-    const avisos = await avisoModel.getAvisos()
-    res.json(avisos)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
+export const avisoController = {
+  async getAll(req, res, next) {
+    try {
+      const { ubicacion, tipo_contrato } = req.query;
+      const filters = {};
+
+      if (ubicacion) filters.ubicacion = ubicacion;
+      if (tipo_contrato) filters.tipo_contrato = tipo_contrato;
+
+      const avisos = await avisoModel.getAvisos(filters);
+      res.json(avisos);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const aviso = await avisoModel.getAvisoById(id);
+
+      if (!aviso) {
+        return res.status(404).json({
+          error: 'Aviso no encontrado'
+        });
+      }
+
+      res.json(aviso);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async create(req, res, next) {
+    try {
+      // Verificar que la empresa existe
+      const empresa = await empresaModel.getById(req.body.empresa_id);
+
+      if (!empresa) {
+        return res.status(400).json({
+          error: 'La empresa especificada no existe'
+        });
+      }
+
+      const nuevoAviso = await avisoModel.addAviso(req.body);
+      const avisoCompleto = await avisoModel.getAvisoById(nuevoAviso.aviso_id);
+
+      res.status(201).json(avisoCompleto);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      // Verificar que la empresa existe si se proporciona
+      if (req.body.empresa_id) {
+        const empresa = await empresaModel.getById(req.body.empresa_id);
+        if (!empresa) {
+          return res.status(400).json({
+            error: 'La empresa especificada no existe'
+          });
+        }
+      }
+
+      const avisoActualizado = await avisoModel.updateAviso(id, req.body);
+
+      if (!avisoActualizado) {
+        return res.status(404).json({
+          error: 'Aviso no encontrado'
+        });
+      }
+
+      const avisoCompleto = await avisoModel.getAvisoById(avisoActualizado.aviso_id);
+      res.json(avisoCompleto);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      const avisoEliminado = await avisoModel.deleteAviso(id);
+
+      if (!avisoEliminado) {
+        return res.status(404).json({
+          error: 'Aviso no encontrado'
+        });
+      }
+
+      res.json({
+        message: 'Aviso eliminado exitosamente',
+        aviso: avisoEliminado
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-}
-
-export async function getAvisoById(req, res) {
-  try {
-    const aviso = await avisoModel.getAvisoById(req.params.id)
-    res.json(aviso)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
-
-export async function addAviso(req, res) {
-  try {
-    const aviso = await avisoModel.addAviso(req.body)
-    res.status(201).json(aviso)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
-
-export async function deleteAviso(req, res) {
-  try {
-    await avisoModel.deleteAviso(req.params.id)
-    res.status(204).end()
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+};

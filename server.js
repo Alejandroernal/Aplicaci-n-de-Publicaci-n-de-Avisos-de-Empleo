@@ -5,6 +5,7 @@ import empresaRoutes from './src/routes/empresaRoutes.js'
 import avisoRoutes from './src/routes/avisoRoutes.js'
 
 
+
 dotenv.config()
 const PORT = process.env.PORT || 3000
 
@@ -31,8 +32,13 @@ app.use('/api/avisos', avisoRoutes)
 
 console.log('Rutas montadas correctamente');
 
+// Middleware de errores global
+app.use((error, req, res, next) => {
+  console.error('Error global:', error);
+  res.status(500).json({ error: error.message });
+});
+
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en  http://localhost:${PORT}`)
 })
-
 

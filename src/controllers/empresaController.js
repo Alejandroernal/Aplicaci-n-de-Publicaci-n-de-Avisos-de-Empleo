@@ -1,4 +1,4 @@
-import { empresaModel } from '../models/empresaModel.js';
+import * as  empresaModel from '../models/empresaModel.js';
 
 export const empresaController = {
   async getAll(req, res, next) {
