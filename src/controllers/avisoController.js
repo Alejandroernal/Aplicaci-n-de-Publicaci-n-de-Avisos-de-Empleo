@@ -38,7 +38,7 @@ export const avisoController = {
   async create(req, res, next) {
     try {
       // Verificar que la empresa existe
-      const empresa = await empresaModel.getById(req.body.empresa_id);
+  const empresa = await empresaModel.getEmpresaById(req.body.empresa_id);
 
       if (!empresa) {
         return res.status(400).json({

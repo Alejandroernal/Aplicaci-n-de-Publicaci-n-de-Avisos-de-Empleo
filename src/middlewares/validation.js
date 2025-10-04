@@ -20,7 +20,7 @@ const validateUrl = (url) => {
 };
 
 export const validateAviso = (req, res, next) => {
-  const { titulo, descripcion, ubicacion, tipo_contrato, empresa_id } = req.body;
+  const { titulo, descripcion, ubicacion, tipodecontrato, empresa_id, fecha } = req.body;
 
   if (!titulo || titulo.trim().length === 0) {
     throw new ValidationError('El título es obligatorio');
@@ -46,12 +46,12 @@ export const validateAviso = (req, res, next) => {
     throw new ValidationError('La ubicación no puede exceder 100 caracteres');
   }
 
-  if (!tipo_contrato) {
+  if (!tipodecontrato) {
     throw new ValidationError('El tipo de contrato es obligatorio');
   }
 
   const tiposValidos = ['full-time', 'part-time', 'freelance', 'contrato', 'pasantia'];
-  if (!tiposValidos.includes(tipo_contrato)) {
+  if (!tiposValidos.includes(tipodecontrato)) {
     throw new ValidationError(`El tipo de contrato debe ser uno de: ${tiposValidos.join(', ')}`);
   }
 
@@ -83,6 +83,10 @@ export const validateEmpresa = (req, res, next) => {
 
   if (email && !validateEmail(email)) {
     throw new ValidationError('El email debe ser válido');
+  }
+
+  if (fecha && isNaN(Date.parse(fecha))) {
+    throw new ValidationError('La fecha debe ser una fecha válida');
   }
 
   next();
